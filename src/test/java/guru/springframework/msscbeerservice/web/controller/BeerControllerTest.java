@@ -21,6 +21,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+
 @WebMvcTest(BeerController.class)
 class BeerControllerTest {
 
@@ -58,6 +59,17 @@ class BeerControllerTest {
     }
 
     @Test
+    void saveNewBeer_invalid() throws Exception {
+
+        BeerDto beerDto = getInvalidBeerDto();
+        String beerDtoJson = objectMapper.writeValueAsString(beerDto);
+        mockMvc.perform(post("/api/v1/beer/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(beerDtoJson))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void updateBeerById() throws Exception {
         given(beerService.updateBeer(any(), any())).willReturn(getValidBeerDto());
 
@@ -77,5 +89,10 @@ class BeerControllerTest {
                 .price(new BigDecimal("2.99"))
                 .upc(BeerLoader.BEER_1_UPC)
                 .build();
+    }
+
+    BeerDto getInvalidBeerDto(){
+        return BeerDto.builder().beerName("").upc(null).build();
+
     }
 }
