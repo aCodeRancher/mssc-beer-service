@@ -45,8 +45,8 @@ public class BeerDto implements Serializable  {
     private String beerName;
 
     @NotNull
-    private BeerStyleEnum beerStyle;
-
+    //private BeerStyleEnum beerStyle;
+     private String beerStyle;
     @NotNull
     private String upc;
 
