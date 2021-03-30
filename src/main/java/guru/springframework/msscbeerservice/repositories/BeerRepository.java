@@ -2,7 +2,9 @@ package guru.springframework.msscbeerservice.repositories;
 
 import guru.sfg.brewery.model.BeerStyleEnum;
 import guru.springframework.msscbeerservice.domain.Beer;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.cache.annotation.Caching;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -27,4 +29,7 @@ public interface BeerRepository extends JpaRepository<Beer, UUID> {
     Optional<Beer> findById (UUID uuid);
 
     Optional<Beer> findByMinOnHand (int minOnHand);
+
+    @Caching(evict = {@CacheEvict(value="beerCache", allEntries=true)})
+    void deleteById(UUID uuid);
 }
