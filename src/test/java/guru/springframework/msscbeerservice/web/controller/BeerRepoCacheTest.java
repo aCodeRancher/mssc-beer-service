@@ -80,9 +80,7 @@ public class BeerRepoCacheTest {
                   .thenReturn(Optional.of(starBeer));
          //Sun beer is  cached as it is @Cacheable in BeerRepository
         when(mock.findById(sunUUID))
-                .thenReturn(Optional.of(sunBeer))
-                .thenThrow(new RuntimeException("Beer cached"));
-
+                .thenReturn(Optional.of(sunBeer));
     }
 
     @Test
@@ -98,10 +96,10 @@ public class BeerRepoCacheTest {
     @Test
     void notCachedBeer_repoShouldBeInvoked(){
        assertEquals(Optional.of(starBeer), beerRepository.findByMinOnHand(22));
-        assertEquals(Optional.of(starBeer), beerRepository.findByMinOnHand(22));
        assertEquals(Optional.of(starBeer), beerRepository.findByMinOnHand(22));
-        verify(mock,times(3)).findByMinOnHand(22);
-        //verify(beerRepository,times(3)).findById(starUUID);
+       assertEquals(Optional.of(starBeer), beerRepository.findByMinOnHand(22));
+      verify(mock,times(3)).findByMinOnHand(22);
+
     }
 
 }
