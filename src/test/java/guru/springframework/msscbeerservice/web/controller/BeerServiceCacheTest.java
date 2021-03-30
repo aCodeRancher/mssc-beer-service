@@ -26,6 +26,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class BeerServiceCacheTest {
     private final UUID starUUID = UUID.fromString("969b7f32-e7f2-4d59-92bd-a36a99b3cf27");
     private final UUID sunUUID  = UUID.fromString("245119ff-df57-4d7a-b9f7-2228024a1a48");
+    private final String starUPC = "0631234200137";
+    private final String sunUPC = "0631234211138";
     private final Beer starBeer =
             Beer.builder()
                     .id(starUUID)
@@ -34,7 +36,7 @@ public class BeerServiceCacheTest {
                     .minOnHand(12)
                     .quantityToBrew(200)
                     .price(new BigDecimal("13.96"))
-                    .upc("0631234200137")
+                    .upc(starUPC)
                     .build();
 
     private final Beer  sunBeer  =
@@ -45,7 +47,7 @@ public class BeerServiceCacheTest {
                     .minOnHand(12)
                     .quantityToBrew(200)
                     .price(new BigDecimal("14.96"))
-                    .upc("0631234211138")
+                    .upc(sunUPC)
                     .build();
 
     @Autowired
@@ -75,7 +77,7 @@ public class BeerServiceCacheTest {
 
     @Test
     void beerShouldNotBeCached(){
-        beerRepository.findById(sunUUID);
+        beerRepository.findByUpc(sunUPC);
         assertEquals(empty(), getCachedBeer(sunUUID));
     }
 }
