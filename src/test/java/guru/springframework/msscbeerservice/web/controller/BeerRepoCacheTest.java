@@ -54,6 +54,7 @@ public class BeerRepoCacheTest {
             .build();
 
     private BeerRepository mock;
+
     @Autowired
     private BeerRepository beerRepository;
 
@@ -81,6 +82,8 @@ public class BeerRepoCacheTest {
          //Sun beer is  cached as it is @Cacheable in BeerRepository
         when(mock.findById(sunUUID))
                 .thenReturn(Optional.of(sunBeer));
+
+        doNothing().when(mock).deleteById(sunUUID);
     }
 
     @Test
@@ -91,6 +94,7 @@ public class BeerRepoCacheTest {
         assertEquals(Optional.of(sunBeer),beerRepository.findById(sunUUID));
         //after the verify(mock), the repository findById is not invoked
         verifyNoMoreInteractions(mock);
+        verify(beerRepository, times(2)).findById(sunUUID);
     }
 
     @Test
@@ -102,4 +106,11 @@ public class BeerRepoCacheTest {
 
     }
 
+    @Test
+    void delete_Cached_and_nonCached_Beer(){
+        beerRepository.deleteById(sunUUID);
+        verify(mock,times(1)).deleteById(sunUUID);
+        beerRepository.findById(starUUID);
+        verify(mock,times(1)).findById(starUUID);
+    }
 }
