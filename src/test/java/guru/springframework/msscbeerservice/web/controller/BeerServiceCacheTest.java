@@ -1,6 +1,7 @@
 package guru.springframework.msscbeerservice.web.controller;
 
 
+import guru.sfg.brewery.model.BeerDto;
 import guru.sfg.brewery.model.BeerStyleEnum;
 import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
@@ -65,6 +66,7 @@ public class BeerServiceCacheTest {
     void clean(){
         beerRepository.deleteAll();
     }
+
     private Optional<Beer> getCachedBeer(UUID uuid){
         return ofNullable(cacheManager.getCache("beerCache")).map(c->c.get(uuid, Beer.class));
     }
