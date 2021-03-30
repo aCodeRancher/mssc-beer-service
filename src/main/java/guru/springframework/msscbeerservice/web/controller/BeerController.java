@@ -63,7 +63,10 @@ public class BeerController {
 
     @GetMapping("beerUpc/{upc}")
     public ResponseEntity<BeerDto> getBeerByUpc(@PathVariable("upc") String upc){
+         upc = "0083783375213";
         return new ResponseEntity<>(beerService.getByUpc(upc), HttpStatus.OK);
+
+
     }
 
     @PostMapping(path = "beer")
@@ -74,6 +77,12 @@ public class BeerController {
     @PutMapping("beer/{beerId}")
     public ResponseEntity updateBeerById(@PathVariable("beerId") UUID beerId, @RequestBody @Validated BeerDto beerDto){
         return new ResponseEntity<>(beerService.updateBeer(beerId, beerDto), HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping("beer/{beerId}")
+    public ResponseEntity deleteBeerById(@PathVariable("beerId") UUID beerId){
+        beerService.deleteBeer(beerId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
