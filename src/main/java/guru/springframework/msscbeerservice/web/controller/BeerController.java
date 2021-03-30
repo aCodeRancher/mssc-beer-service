@@ -63,7 +63,7 @@ public class BeerController {
 
     @GetMapping("beerUpc/{upc}")
     public ResponseEntity<BeerDto> getBeerByUpc(@PathVariable("upc") String upc){
-         upc = "0083783375213";
+
         return new ResponseEntity<>(beerService.getByUpc(upc), HttpStatus.OK);
 
 
