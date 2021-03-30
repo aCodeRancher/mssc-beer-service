@@ -2,7 +2,6 @@ package guru.springframework.msscbeerservice.web.controller;
 
 
 import guru.sfg.brewery.model.BeerStyleEnum;
-import guru.springframework.msscbeerservice.MsscBeerServiceApplication;
 import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
 
