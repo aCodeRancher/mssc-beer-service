@@ -3,11 +3,14 @@ package guru.springframework.msscbeerservice.web.controller;
 import guru.sfg.brewery.model.BeerStyleEnum;
 import guru.springframework.msscbeerservice.domain.Beer;
 import guru.springframework.msscbeerservice.repositories.BeerRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
@@ -61,10 +64,10 @@ public class BeerRepoCacheTest {
     @EnableCaching
     @Configuration
     public static class CachingTestConfig{
-        @Bean
-        public BeerRepository beerRepositoryMockImplementation(){
+       @Bean
+         public BeerRepository beerRepositoryMockImplementation(){
             return mock(BeerRepository.class);
-        }
+       }
 
         @Bean
         public CacheManager cacheManager(){
@@ -73,17 +76,22 @@ public class BeerRepoCacheTest {
     }
 
     @BeforeEach
-    void setUp(){
+    public void setUp(){
          mock = AopTestUtils.getTargetObject(beerRepository);
          Mockito.reset(mock);
          //star beer is not cacheable as it is not annotated @Cacheable in BeerRepository
          when(mock.findByMinOnHand(22))
                   .thenReturn(Optional.of(starBeer));
          //Sun beer is  cached as it is @Cacheable in BeerRepository
-        when(mock.findById(sunUUID))
-                .thenReturn(Optional.of(sunBeer));
+         when(mock.findById(sunUUID))
+               .thenReturn(Optional.of(sunBeer));
 
         doNothing().when(mock).deleteById(sunUUID);
+    }
+
+    @AfterEach
+    public void validate() {
+        validateMockitoUsage();
     }
 
     @Test
@@ -92,9 +100,10 @@ public class BeerRepoCacheTest {
         assertEquals(Optional.of(sunBeer), beerRepository.findById(sunUUID));
         verify(mock,times(1)).findById(sunUUID);
         assertEquals(Optional.of(sunBeer),beerRepository.findById(sunUUID));
+        // verify(beerRepository, times(2)).findById(sunUUID);
         //after the verify(mock), the repository findById is not invoked
         verifyNoMoreInteractions(mock);
-        verify(beerRepository, times(2)).findById(sunUUID);
+
     }
 
     @Test
